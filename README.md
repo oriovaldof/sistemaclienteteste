@@ -3,6 +3,7 @@ Sistema de crud basico para cadastro de Cliente
 
 Neste repositorio segue pasta BD com o sql do Banco de Dados;
 
+Estrutura Breve
 -include_archives.php --> responsavel por carregar os includes
 -assets --> pasta responsavel por receber arquivos js e css
 -framework
@@ -18,5 +19,8 @@ acessar o arquivo conn.php, localizado na pasta framework/config/conn.php
 Url do Site
 acessar o arquivo include_archives.php e altera o valor da session $_SESSION['UrlSite'];
 
+Template Utilizado
+Gentelella - Bootstrap Admin Template by Colorlib
+ https://github.com/puikinsh/gentelella
 
-Estrutura Breve
+
