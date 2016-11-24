@@ -28,7 +28,8 @@ class client_model {
                         WHEN 'PF' THEN 'Pessoa Física'
                         END as tipo,
                         clientCpfCnpj,
-                        clientTipo
+                        clientTipo,
+                        clientNomeFantasia,clientInscricaoEstadual
                   From client
                   WHERE clientCod = :clientCod ";
         $result = $con->prepare($sql);
@@ -37,13 +38,21 @@ class client_model {
 
         return $resultSet;
     }
-    public function getContact($insertIdClient){
-        $con = connection::connect();
+    public function getContact($insertIdClient, $type = null){
+        $con        = connection::connect();
+        $arrayBD    = array();
         $sql = "Select *
                   From contact
                   WHERE clientCod = :clientCod ";
+
+        $arrayBD[':clientCod'] = $insertIdClient;
+
+        if(!empty($type)){
+            $sql .= " and contactType = :contactType ";
+            $arrayBD[':contactType'] = $type;
+        }
         $result = $con->prepare($sql);
-        $result->execute(array(':clientCod' => $insertIdClient));
+        $result->execute($arrayBD);
         $resultSet = $result->fetchAll();
 
         return $resultSet;

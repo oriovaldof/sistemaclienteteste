@@ -50,6 +50,52 @@ function loadTypeClient(type){
         }
     }
 }
+function sendMail(){
+    var dada    = $('#FormMail').serialize();
+    var editor  = $('#editor').html();
+    dada        = dada+'&editor='+editor;
+    $.ajax({
+        url:URLSite+'modules/client/controller/client.php?Op=sendMail',
+        type: "POST",
+        datatype: "json",
+        data:dada,
+        success:function(data){
+            var obj = $.parseJSON(data);
+            if(obj.action == "S"){
+                alert(obj.Message);
+                returnGrid();
+            }else{
+                alert(obj.Message);
+            }
+        }
+    });
+}
+//responsavel pelo chamar FormMail
+function mailForm(cod){
+    $.ajax({
+        url:URLSite+'modules/client/controller/client.php?Op=mailForm',
+        type: "POST",
+        datatype: "json",
+        data:{'clientCod':cod},
+        success:function(data){
+            var obj = $.parseJSON(data);
+
+            $('#contentForm').html(obj.returnHtml);
+            $('#contentForm').show();
+            $('#contentButton').hide();
+            $('#contentGrid').hide();
+            $('#editor').wysiwyg({
+                 fileUploadError: showErrorAlert
+            });
+            $('#sendAll').click(function () {
+                var val = this.checked;
+                $('.classCheck').each(function () {
+                    $(this).prop('checked', val);
+                });
+            });
+        }
+    });
+}
 //responsavel pelo visualizar
 function vis(cod){
     $.ajax({
@@ -83,6 +129,8 @@ function edit(cod){
                     $('#clientCod').val(obj.clientCod);
                     $('#clientTipo').val(obj.clientTipo);
                     $('#clientNomeRazaoSocial').val(obj.clientNomeRazaoSocial);
+                    $('#clientNomeFantasia').val(obj.clientNomeFantasia);
+                    $('#clientInscricaoEstadual').val(obj.clientInscricaoEstadual);
                     $('#clientCpfCnpj').val(obj.clientCpfCnpj);
                     $('#contentContact').html(obj.htmlContact);
                     $('#contentAddress').html(obj.htmlAdress);
@@ -424,3 +472,15 @@ function limpaStringCPFCNPJ(string){
     return string;
 
 }
+function showErrorAlert(reason, detail) {
+    var msg = '';
+    if (reason === 'unsupported-file-type') {
+        msg = "Unsupported format " + detail;
+    } else {
+        console.log("error uploading file", reason, detail);
+    }
+    $('<div class="alert"> <button type="button" class="close" data-dismiss="alert">&times;</button>' +
+    '<strong>File upload error</strong> ' + msg + ' </div>').prependTo('#alerts');
+}
+
+
